@@ -26,4 +26,8 @@ This repository contains the source code necessary to compile the game client ex
 	* **Support Skills:** Support skill levels are correctly maintained when the active skill group is changed/reset.
 	* **Horse Skills:** Implemented special handling to ensure horse skill cooldowns are cleared when their level is changed to 0 (via commands like `/setsk`).
 	* **Combo Skills:** Combo skills are automatically disabled if their level is changed to 0 (via commands like `/setsk`).
+* **Invisibility improvements:** Invisibility effects are improved for the Assassin's Sealth skill, `/in` command and revive invisibility.
+	* **Mini-map:** When invisible by any method, the character doesn't show in the mini map for other players.
+	* **Stepping dust:** When invisible by any method, character's steps don't show the dust effect when walking around.
+	* **Stealth:** Assassin's stealth effect is visible to everyone around the character when the skill is used.
 * **.gitignore file:** Ignoring all files and directories ending in `_BAK` or `.BAK` (case-insensitive)
