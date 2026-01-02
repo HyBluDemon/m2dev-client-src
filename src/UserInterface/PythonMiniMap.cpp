@@ -222,7 +222,9 @@ void CPythonMiniMap::Update(float fCenterX, float fCenterY)
 				}
 			}
 
-			const float c_fMiniMapWindowRadius = 55.0f;
+			// Calculate dynamic radius based on actual minimap window size
+			// Subtract border width (approx 9 pixels) to keep markers inside visible area
+			const float c_fMiniMapWindowRadius = (m_fWidth < m_fHeight ? m_fWidth : m_fHeight) / 2.0f - 9.0f;
 
 			float fDistanceFromCenterX = (rAtlasMarkInfo.m_fX - m_fCenterX) * fooCellScale * m_fScale;
 			float fDistanceFromCenterY = (rAtlasMarkInfo.m_fY - m_fCenterY) * fooCellScale * m_fScale;
@@ -231,8 +233,8 @@ void CPythonMiniMap::Update(float fCenterX, float fCenterY)
 			if (fDistanceFromCenter >= c_fMiniMapWindowRadius)
 			{
 				float fRadian = atan2f(fDistanceFromCenterY, fDistanceFromCenterX);
-				fDistanceFromCenterX = 55.0f * cosf(fRadian);
-				fDistanceFromCenterY = 55.0f * sinf(fRadian);
+				fDistanceFromCenterX = c_fMiniMapWindowRadius * cosf(fRadian);
+				fDistanceFromCenterY = c_fMiniMapWindowRadius * sinf(fRadian);
 				rAtlasMarkInfo.m_fMiniMapX = ( m_fWidth - (float)m_WhiteMark.GetWidth() ) / 2.0f + fDistanceFromCenterX + m_fScreenX;
 				rAtlasMarkInfo.m_fMiniMapY = ( m_fHeight - (float)m_WhiteMark.GetHeight() ) / 2.0f + fDistanceFromCenterY + m_fScreenY;
 			}
@@ -667,7 +669,10 @@ bool CPythonMiniMap::Create()
 
 void CPythonMiniMap::__SetPosition()
 {
-	m_fMiniMapRadius = fMIN(6400.0f / ((float) CTerrainImpl::CELLSCALE) * m_fScale, 64.0f);
+	// Calculate dynamic radius - use smaller dimension to ensure circular clipping
+	// Subtract border width (approx 9 pixels) to keep markers inside visible area
+	float fWindowRadius = (m_fWidth < m_fHeight ? m_fWidth : m_fHeight) / 2.0f - 9.0f;
+	m_fMiniMapRadius = fMIN(6400.0f / ((float) CTerrainImpl::CELLSCALE) * m_fScale, fWindowRadius);
 
 	m_matWorld._11 = m_fWidth * m_fScale;
 	m_matWorld._22 = m_fHeight * m_fScale;
@@ -1024,11 +1029,19 @@ void CPythonMiniMap::RenderAtlas(float fScreenX, float fScreenY)
 
 		if (TYPE_TARGET == rAtlasMarkInfo.m_byType)
 		{
-			__RenderMiniWayPointMark(rAtlasMarkInfo.m_fScreenX, rAtlasMarkInfo.m_fScreenY);
+			// Convert from WhiteMark-centered to actual center for rendering
+			__RenderMiniWayPointMark(
+				rAtlasMarkInfo.m_fScreenX + m_WhiteMark.GetWidth() / 2,
+				rAtlasMarkInfo.m_fScreenY + m_WhiteMark.GetHeight() / 2
+			);
 		}
 		else
 		{
-			__RenderWayPointMark(rAtlasMarkInfo.m_fScreenX, rAtlasMarkInfo.m_fScreenY);
+			// Convert from WhiteMark-centered to actual center for rendering
+			__RenderWayPointMark(
+				rAtlasMarkInfo.m_fScreenX + m_WhiteMark.GetWidth() / 2,
+				rAtlasMarkInfo.m_fScreenY + m_WhiteMark.GetHeight() / 2
+			);
 		}
 	}
 
