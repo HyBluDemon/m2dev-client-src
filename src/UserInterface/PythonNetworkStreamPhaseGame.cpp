@@ -3946,12 +3946,12 @@ bool CPythonNetworkStream::RecvMarkUpdate()
 	Tracef(" >> RecvMarkUpdate: guildID=%u, imgIdx=%u\n", packet.guildID, packet.imgIdx);
 
 	// Rate limit mark downloads to prevent connection spam from multiple simultaneous guild uploads
-	// Allow at most one download request per 5 seconds from server-pushed updates
+	// Allow at most one download request per 1 second from server-pushed updates
 	DWORD dwCurrentTime = ELTimer_GetMSec();
 	if (dwCurrentTime < gs_dwMarkUpdateRequestTime)
 		return true;
 
-	gs_dwMarkUpdateRequestTime = dwCurrentTime + 5000; // 5 second cooldown
+	gs_dwMarkUpdateRequestTime = dwCurrentTime + 1000; // 1 second cooldown
 
 	CGuildMarkDownloader& rkGuildMarkDownloader = CGuildMarkDownloader::Instance();
 	rkGuildMarkDownloader.Connect(m_kMarkAuth.m_kNetAddr, m_kMarkAuth.m_dwHandle, m_kMarkAuth.m_dwRandomKey);

@@ -360,7 +360,9 @@ bool CGuildMarkDownloader::__SendMarkCRCList()
 	TPacketCGMarkCRCList kPacketMarkCRCList;
 
 	if (!CGuildMarkManager::Instance().GetBlockCRCList(m_currentRequestingImageIndex, kPacketMarkCRCList.crclist))
+	{
 		__CompleteState_Set();
+	}
 	else
 	{
 		kPacketMarkCRCList.header = HEADER_CG_MARK_CRCLIST;
