@@ -6,7 +6,7 @@
 #include <utf8.h>
 
 #include <ft2build.h>
-#include FT_BITMAP_H
+#include FT_FREETYPE_H
 
 #include <cmath>
 
@@ -22,8 +22,17 @@ static struct STextBarGammaLUT {
 
 void CTextBar::__SetFont(int fontSize, bool isBold)
 {
-	// Create a per-instance FT_Face (this instance owns it)
-	m_ftFace = CFontManager::Instance().CreateFace("Tahoma");
+	// Load bold font variant if available, otherwise fall back to regular
+	if (isBold)
+	{
+		m_ftFace = CFontManager::Instance().CreateFace("Tahoma Bold");
+		if (!m_ftFace)
+			m_ftFace = CFontManager::Instance().CreateFace("Tahoma");
+	}
+	else
+	{
+		m_ftFace = CFontManager::Instance().CreateFace("Tahoma");
+	}
 	if (!m_ftFace)
 		return;
 
@@ -109,11 +118,6 @@ void CTextBar::TextOut(int ix, int iy, const char * c_szText)
 			continue;
 
 		FT_GlyphSlot slot = m_ftFace->glyph;
-
-		// Apply synthetic bold (32 = 0.5px embolden; 64 = 1px was too aggressive)
-		if (m_isBold && slot->bitmap.buffer)
-			FT_Bitmap_Embolden(CFontManager::Instance().GetLibrary(), &slot->bitmap, 32, 0);
-
 		FT_Bitmap& bitmap = slot->bitmap;
 
 		int bmpX = penX + slot->bitmap_left;

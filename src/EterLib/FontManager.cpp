@@ -62,8 +62,11 @@ bool CFontManager::Initialize()
 
 	// Common Latin fonts
 	m_fontPathMap["arial"] = "arial.ttf";
+	m_fontPathMap["arial bold"] = "arialbd.ttf";
 	m_fontPathMap["tahoma"] = "tahoma.ttf";
+	m_fontPathMap["tahoma bold"] = "tahomabd.ttf";
 	m_fontPathMap["verdana"] = "verdana.ttf";
+	m_fontPathMap["verdana bold"] = "verdanab.ttf";
 	m_fontPathMap["times new roman"] = "times.ttf";
 	m_fontPathMap["courier new"] = "cour.ttf";
 	m_fontPathMap["segoe ui"] = "segoeui.ttf";

@@ -38,7 +38,7 @@ PyObject* grpCreateBigTextBar(PyObject* poSelf, PyObject* poArgs)
 	if (!PyTuple_GetInteger(poArgs, 2, &iFontSize))
 		return Py_BuildException();
 
-	CTextBar * pTextBar = new CTextBar(iFontSize, true);
+	CTextBar * pTextBar = new CTextBar(iFontSize, false);
 	if (!pTextBar->Create(iWidth, iHeight))
 	{
 		delete pTextBar;
