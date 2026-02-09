@@ -75,6 +75,7 @@ namespace UI
 	void CWindowManager::Destroy()
 	{
 		__ClearReserveDeleteWindowList();
+
 #ifdef __WINDOW_LEAK_CHECK__
 		std::set<CWindow*>::iterator i;
 		for (i=gs_kSet_pkWnd.begin(); i!=gs_kSet_pkWnd.end(); ++i)
@@ -430,7 +431,7 @@ namespace UI
 			pParentWin->DeleteChild(pWin);
 		}
 		pWin->Clear();
-		m_ReserveDeleteWindowList.push_back(pWin);
+		m_ReserveDeleteWindowList.insert(pWin);
 	}
 
 	BOOL CWindowManager::IsDragging()
@@ -710,16 +711,17 @@ namespace UI
 
 	void CWindowManager::__ClearReserveDeleteWindowList()
 	{
-		for (TWindowContainer::iterator itor = m_ReserveDeleteWindowList.begin(); itor != m_ReserveDeleteWindowList.end(); ++itor)
-		{
-			CWindow * pWin = *itor;
-#ifdef __WINDOW_LEAK_CHECK__
-			gs_kSet_pkWnd.erase(pWin);
-#endif
-			delete pWin;
-		}
-		m_ReserveDeleteWindowList.clear();
+		while (!m_ReserveDeleteWindowList.empty()) {
+			auto tmp = m_ReserveDeleteWindowList;
+			m_ReserveDeleteWindowList.clear();
 
+			for (CWindow* pWin : tmp) {
+#ifdef __WINDOW_LEAK_CHECK__
+				gs_kSet_pkWnd.erase(pWin);
+#endif
+				delete pWin;
+			}
+		}
 	}	
 
 	void CWindowManager::Update()
