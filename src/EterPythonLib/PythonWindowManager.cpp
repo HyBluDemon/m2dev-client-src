@@ -711,18 +711,21 @@ namespace UI
 
 	void CWindowManager::__ClearReserveDeleteWindowList()
 	{
-		while (!m_ReserveDeleteWindowList.empty()) {
-			auto tmp = m_ReserveDeleteWindowList;
-			m_ReserveDeleteWindowList.clear();
+		if (m_ReserveDeleteWindowList.empty())
+			return;
 
+		std::unordered_set<CWindow*> tmp;
+		do {
+			tmp.swap(m_ReserveDeleteWindowList);
 			for (CWindow* pWin : tmp) {
 #ifdef __WINDOW_LEAK_CHECK__
 				gs_kSet_pkWnd.erase(pWin);
 #endif
 				delete pWin;
 			}
-		}
-	}	
+			tmp.clear();
+		} while (!m_ReserveDeleteWindowList.empty());
+	}
 
 	void CWindowManager::Update()
 	{
