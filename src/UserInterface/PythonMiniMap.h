@@ -83,6 +83,9 @@ class CPythonMiniMap : public CScreen, public CSingleton<CPythonMiniMap>
 		void SetAtlasCenterPosition(int x, int y);
 		void SetAtlasScale(float fx, float fy);
 
+		// Atlas Marks
+		void ClearAtlasMarks();
+
 		// NPC List
 		void ClearAtlasMarkInfo();
 		void RegisterAtlasMark(BYTE byType, const char * c_szName, long lx, long ly);

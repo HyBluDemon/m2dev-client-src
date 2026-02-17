@@ -818,6 +818,12 @@ void CPythonMiniMap::SetAtlasScale(float fx, float fy)
 	ComputeAtlasCenteringOffsets();
 }
 
+void CPythonMiniMap::ClearAtlasMarks()
+{
+	ClearAtlasMarkInfo();
+	ClearGuildArea();
+}
+
 bool CPythonMiniMap::LoadAtlas()
 {
 	CPythonBackground& rkBG=CPythonBackground::Instance();
@@ -863,7 +869,7 @@ bool CPythonMiniMap::LoadAtlas()
 
 	ComputeAtlasCenteringOffsets();
 	
-	ClearGuildArea();
+	ClearAtlasMarks();
 
 	if (m_bShowAtlas)
 		OpenAtlasWindow();
