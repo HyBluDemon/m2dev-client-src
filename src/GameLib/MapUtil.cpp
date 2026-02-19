@@ -30,6 +30,7 @@ void Environment_Init(SEnvironmentData& envData)
 	// MR-14: Fog update by Alaric
 	envData.bFogEnable = TRUE;
 	envData.bDensityFog = TRUE;
+	envData.bFogLevel = 0;
 	// MR-14: -- END OF -- Fog update by Alaric
 	envData.m_fFogNearDistance = 25600.0f * 0.5f;
 	envData.m_fFogFarDistance = 25600.0f * 0.7f;
